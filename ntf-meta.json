@@ -1,0 +1,15 @@
+{
+  "attributes": [
+    {
+      "trait_type": "type",
+      "value": "value"
+    },
+    {
+      "trait_type": "type2",
+      "value": "value2"
+    }
+  ],
+  "description": "The world best token.",
+  "image": "https://gateway.pinata.cloud/ipfs/${your-file-cid}",
+  "name": "Token name"
+}
