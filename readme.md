@@ -11,12 +11,13 @@ PUBLIC_KEY=your-wallet-public-key
 
 ### Deploy contract (ropsten testnet)
 
-```bash
-npx hardhat run scripts/deploy.js --network ropsten
-```
+* tweak some variables
+* run ```npx hardhat run scripts/deploy.js --network ropsten```
+
 
 ### Mint
 
-```bash
-node scripts/mint-nft.js
-```
+* upload your artfact to ipfs ([Pinata](https://app.pinata.cloud/pinmanager))
+* upload ntf-meta.json to ipfs
+* tweak some variables
+* run ```node scripts/mint-nft.js```

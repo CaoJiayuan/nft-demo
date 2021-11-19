@@ -6,10 +6,10 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3")
 const web3 = createAlchemyWeb3(API_URL)
 
-const CID = "your-file-cid"
+const CID = "your-meta-cid"
 
 const contract = require("../artifacts/contracts/nerio-demo-nft.sol/NerioDemoNFT.json")
-const contractAddress = "your-contract-address-after-deploy"
+const contractAddress = "your-contract-address-after-deployed"
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress)
 
 async function mintNFT(tokenURI) {
