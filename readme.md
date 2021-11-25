@@ -21,3 +21,7 @@ PUBLIC_KEY=your-wallet-public-key
 * upload ntf-meta.json to ipfs
 * tweak some variables
 * run ```node scripts/mint-nft.js```
+
+### Gen golang code 
+
+```abigen --sol .\contracts\erc1155v2.sol --pkg contracts --out .\contracts\erc1155.go```
