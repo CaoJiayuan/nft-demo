@@ -7,7 +7,6 @@ import (
 	"math/big"
 	"nft-demo/contracts"
 	"os"
-	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -25,7 +24,6 @@ func main() {
 	}
 	account := common.HexToAddress(os.Getenv("PUBLIC_KEY"))
 
-	time.Sleep(time.Second * 3)
 	con := getContarct(conn)
 
 	fmt.Println(con.BalanceOfAccount(&bind.CallOpts{
