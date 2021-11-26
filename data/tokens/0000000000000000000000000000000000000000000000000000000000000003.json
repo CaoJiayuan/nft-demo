@@ -3,14 +3,16 @@
     "external_url": "https://github.com/",
     "image": "https://openmoji.org/data/color/svg/1F528.svg",
     "name": "Hammer",
-    "properties": {
-        "力量" : {
-            "type" :"integer",
+    "attributes": [
+        {
+            "boost_number": "boost_number",
+            "trait_type": "力量",
             "value": 42
         },
-        "敏捷": {
-            "type": "integer",
+        {
+            "boost_number": "boost_number",
+            "trait_type": "敏捷",
             "value": 10
         }
-    }
+    ]
 }

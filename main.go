@@ -23,7 +23,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-	mint(conn)
 	account := common.HexToAddress(os.Getenv("PUBLIC_KEY"))
 
 	time.Sleep(time.Second * 3)
