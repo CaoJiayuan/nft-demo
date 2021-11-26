@@ -5,14 +5,16 @@
     "name": "Hammer",
     "attributes": [
         {
-            "boost_number": "number",
+            "boost_number": "boost_number",
             "trait_type": "力量",
-            "value": 42
+            "value": 42,
+            "max_value": 100
         },
         {
-            "boost_number": "number",
+            "boost_number": "boost_number",
             "trait_type": "敏捷",
-            "value": 10
+            "value": 10,
+            "max_value": 100
         }
     ]
 }
