@@ -1,0 +1,16 @@
+{
+    "description": "锤子",
+    "external_url": "https://github.com/",
+    "image": "https://openmoji.org/data/color/svg/1F528.svg",
+    "name": "Hammer",
+    "properties": {
+        "力量" : {
+            "type" :"integer",
+            "value": 42
+        },
+        "敏捷": {
+            "type": "integer",
+            "value": 10
+        }
+    }
+}

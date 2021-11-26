@@ -6,7 +6,7 @@ async function main() {
     const signer = await ethers.getSigner(PUBLIC_KEY)
     const c = await ethers.getContractAt("NerioErc1155v2", contractAddress, signer)
  
-    const tx = await c.mint(to, 2, 10, "0x00")
+    const tx = await c.mint(to, 2, 100, "0x00")
     console.log(tx)
 }
 
