@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>address: {{addr}}</p>
+        <button @click="sign">sign</button>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            addr: null
+        },
+        methods: {
+            sign() {
+                var msg = convertToHex("hello world")
+                var from = this.addr
+                var params = [msg, from]
+                var method = 'personal_sign'
+
+                web3.currentProvider.sendAsync({
+                    method,
+                    params,
+                    from,
+                }, function (err, result) {
+                    if (err) return console.error(err)
+                    if (result.error) return console.error(result.error)
+                    console.log(result)
+                })
+            }
+        },
+        mounted() {
+            ethereum.request({ method: 'eth_requestAccounts' }).then(accs => this.addr = accs[0]);
+
+            ethereum.on('accountsChanged', function (accounts) {
+                this.addr = accounts[0]
+            });
+        }
+    })
+
+    function convertToHex(str) {
+        var hex = '';
+        for (var i = 0; i < str.length; i++) {
+            hex += '' + str.charCodeAt(i).toString(16);
+        }
+        return hex;
+    }
+</script>
+
+</html>

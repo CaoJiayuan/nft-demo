@@ -2,33 +2,81 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"math/big"
 	"nft-demo/contracts"
 	"os"
+	"strings"
 
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
 )
 
+const ChainId = 3
+
 func main() {
 	godotenv.Load()
-	// 连接本地节点
-	conn, err := ethclient.Dial("http://127.0.0.1:8545")
+	flag.Parse()
+	conn, err := ethclient.Dial("ws://127.0.0.1:8546")
+	// conn, err := ethclient.Dial("https://rpcpeg.compverse.io")
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-	account := common.HexToAddress(os.Getenv("PUBLIC_KEY"))
+	// account := common.HexToAddress(os.Getenv("PUBLIC_KEY"))
 
-	con := getContarct(conn)
+	fmt.Println(flag.Args())
 
-	fmt.Println(con.BalanceOfAccount(&bind.CallOpts{
-		From: account,
-	}, account))
+	if len(flag.Args()) > 0 {
+		switch flag.Arg(0) {
+		case "listen":
+			subscribeEvent(conn)
+		case "mint":
+			mint(conn)
+		case "deploy":
+			deploy(conn)
+		case "n":
+			fmt.Println(conn.BlockNumber(context.Background()))
+		}
+	}
+}
+
+func subscribeEvent(conn *ethclient.Client) {
+	addr := common.HexToAddress("0x8C9E18930c41ABbD9F5dF3a58053EBa25434EF19")
+	contractAbi, e := abi.JSON(strings.NewReader(contracts.NerioErc1155v2ABI))
+	if e != nil {
+		log.Fatal(e)
+	}
+	query := ethereum.FilterQuery{
+		Addresses: []common.Address{addr},
+	}
+	logs := make(chan types.Log)
+	sub, err := conn.SubscribeFilterLogs(context.Background(), query, logs)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print("listening contract event")
+
+	for {
+		select {
+		case err := <-sub.Err():
+			log.Fatal(err)
+		case vLog := <-logs:
+			d, e := contractAbi.Unpack("TransferSingle", vLog.Data)
+			tx, _, e := conn.TransactionByHash(context.Background(), vLog.TxHash)
+			if e == nil {
+				fmt.Println(tx.To().Hex())
+			}
+			fmt.Println(d, e, vLog.Address.Hex())
+		}
+	}
 }
 
 func deploy(conn *ethclient.Client) {
@@ -58,7 +106,7 @@ func mint(conn *ethclient.Client) {
 }
 
 func getContarct(conn *ethclient.Client) *contracts.NerioErc1155v2 {
-	addr := common.HexToAddress("0xCd455c63DC786CB1E4D3a4c46ac646448421DCEF")
+	addr := common.HexToAddress("0x8C9E18930c41ABbD9F5dF3a58053EBa25434EF19")
 
 	erc1155, e := contracts.NewNerioErc1155v2(addr, conn)
 	if e != nil {
@@ -122,11 +170,11 @@ func NewKeyTransactor(conn *ethclient.Client, pk string) *bind.TransactOpts {
 	}
 	gasPrice, err := conn.SuggestGasPrice(context.Background())
 	if err != nil {
-		log.Fatal(err, "gas err")
+		log.Fatal(err, " gas err")
 	}
 
 	// 绑定pk
-	opt, e := bind.NewKeyedTransactorWithChainID(key, big.NewInt(4))
+	opt, e := bind.NewKeyedTransactorWithChainID(key, big.NewInt(ChainId))
 	if e != nil {
 		log.Fatal(e)
 	}
